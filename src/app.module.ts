@@ -8,6 +8,11 @@ import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { DataBaseModule } from './shared/data-base/data-base.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
+import { APP_FILTER } from '@nestjs/core';
+import { PrismaExceptionFilter } from './prisma/prisma-exception.filter';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -20,8 +25,17 @@ import { FavoritesModule } from './favorites/favorites.module';
     AlbumsModule,
     DataBaseModule,
     FavoritesModule,
+    PrismaModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    PrismaService,
+    UsersService,
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
